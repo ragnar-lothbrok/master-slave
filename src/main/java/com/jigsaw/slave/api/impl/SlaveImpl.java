@@ -4,6 +4,7 @@ import com.home.beans.Task;
 import com.jigsaw.enums.TaskStatusEnum;
 import com.jigsaw.master.api.Master;
 import com.jigsaw.master.api.Slave;
+import com.jigsaw.master.api.impl.MasterImpl;
 
 public class SlaveImpl implements Slave {
 
@@ -41,16 +42,17 @@ public class SlaveImpl implements Slave {
 	}
 
 	public void update() {
-		System.out.println("Item added in Queue of : "+observerName);
+		System.out.println("Item added in Queue of : " + observerName);
 		for (Task task : slaveTaskQueue.getbQueue()) {
-			if(task.getTaskStatusEnum().name().equalsIgnoreCase(TaskStatusEnum.PROCESSING.name())){
+			if (task.getTaskStatusEnum().name().equalsIgnoreCase(TaskStatusEnum.PROCESSING.name())) {
 				doTask(task);
+				((MasterImpl) master).updateTask(task);
 			}
 		}
 	}
-	
-	private void doTask(Task task){
-		System.out.println("Task performed : "+task.getTaskName());
+
+	private void doTask(Task task) {
+		System.out.println("Task performed : " + task.getTaskName());
 		task.setTaskStatusEnum(TaskStatusEnum.FINISHED);
 	}
 
